@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { Database, Search, Filter } from 'lucide-react';
-
-const API_URL = 'http://localhost:8000/api/v1';
 
 export default function SamplesList() {
   const { data: samples, isLoading } = useQuery({

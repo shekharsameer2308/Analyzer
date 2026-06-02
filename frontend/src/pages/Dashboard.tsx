@@ -1,9 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import Plot from 'react-plotly.js';
-import { Activity, Droplets, Flame, BarChart3, AlertCircle } from 'lucide-react';
-
-const API_URL = 'http://localhost:8000/api/v1';
+import { Activity, Flame, BarChart3, Database } from 'lucide-react';
 
 export default function Dashboard() {
   const { data: kpis, isLoading: kpisLoading } = useQuery({
