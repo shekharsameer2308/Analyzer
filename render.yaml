@@ -1,0 +1,23 @@
+databases:
+  - name: coallab-db
+    databaseName: coallab
+    user: coallab_user
+    plan: free
+
+services:
+  - type: web
+    name: coallab-api
+    env: python
+    plan: free
+    rootDir: backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: POSTGRES_SERVER
+        fromDatabase:
+          name: coallab-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        value: "coal_lab_secret_production_key_2026"
