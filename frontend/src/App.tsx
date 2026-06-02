@@ -3,7 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Dashboard from './pages/Dashboard';
 import SamplesList from './pages/SamplesList';
 import AIInsights from './pages/AIInsights';
-import { LayoutDashboard, Database, BrainCircuit, Activity } from 'lucide-react';
+import AnomalyDetection from './pages/AnomalyDetection';
+import { LayoutDashboard, Database, BrainCircuit, Activity, AlertTriangle } from 'lucide-react';
 import './index.css';
 
 const queryClient = new QueryClient();
@@ -27,6 +28,10 @@ function Layout({ children }: { children: React.ReactNode }) {
           <Link to="/samples" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors">
             <Database size={20} className="text-emerald-400" />
             Coal Samples
+          </Link>
+          <Link to="/anomalies" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors">
+            <AlertTriangle size={20} className="text-red-400" />
+            Anomaly Alerts
           </Link>
           <Link to="/insights" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors">
             <BrainCircuit size={20} className="text-purple-400" />
@@ -53,6 +58,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/samples" element={<SamplesList />} />
+            <Route path="/anomalies" element={<AnomalyDetection />} />
             <Route path="/insights" element={<AIInsights />} />
           </Routes>
         </Layout>
