@@ -1,33 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import Plot from 'react-plotly.js';
 import { Activity, Flame, BarChart3, Database } from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 export default function Dashboard() {
   const { data: kpis, isLoading: kpisLoading } = useQuery({
     queryKey: ['kpis'],
     queryFn: async () => {
-      // Mock data
-      return {
-        total_samples: 100000,
-        avg_gcv: 5432.10,
-        avg_ash: 23.4,
-        avg_moisture: 8.5,
-        avg_quality_score: 72.5
-      };
+      const res = await axios.get(`${API_URL}/analytics/kpis`);
+      return res.data;
     }
   });
 
   const { data: distribution, isLoading: distLoading } = useQuery({
     queryKey: ['mine-distribution'],
     queryFn: async () => {
-      // Mock data
-      return [
-        { mine_name: 'Alpha Washery', count: 21000, avg_gcv: 6100 },
-        { mine_name: 'Beta Colliery', count: 18500, avg_gcv: 4500 },
-        { mine_name: 'Gamma Open Cast', count: 25000, avg_gcv: 5200 },
-        { mine_name: 'Delta Underground', count: 15500, avg_gcv: 6800 },
-        { mine_name: 'Omega Works', count: 20000, avg_gcv: 4900 },
-      ];
+      const res = await axios.get(`${API_URL}/analytics/mine-distribution`);
+      return res.data;
     }
   });
 

@@ -1,21 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { Database, Search, Filter } from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 export default function SamplesList() {
   const { data: samples, isLoading } = useQuery({
     queryKey: ['samples'],
     queryFn: async () => {
-      // Mock data
-      return Array.from({ length: 15 }).map((_, i) => ({
-        id: i,
-        sample_id: `SMP-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
-        mine_name: ['Alpha Washery', 'Beta Colliery', 'Gamma Open Cast'][i % 3],
-        gcv: Math.floor(Math.random() * 3000) + 4000,
-        ash: Math.floor(Math.random() * 30) + 10,
-        moisture: Math.floor(Math.random() * 10) + 2,
-        quality_score: Math.floor(Math.random() * 100),
-        is_anomaly: Math.random() > 0.9
-      }));
+      const res = await axios.get(`${API_URL}/samples`);
+      return res.data;
     }
   });
 
