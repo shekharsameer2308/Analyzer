@@ -4,7 +4,8 @@ import Dashboard from './pages/Dashboard';
 import SamplesList from './pages/SamplesList';
 import AIInsights from './pages/AIInsights';
 import AnomalyDetection from './pages/AnomalyDetection';
-import { LayoutDashboard, Database, BrainCircuit, Activity, AlertTriangle } from 'lucide-react';
+import BlendingOptimizer from './pages/BlendingOptimizer';
+import { LayoutDashboard, Database, BrainCircuit, Activity, AlertTriangle, Layers } from 'lucide-react';
 import './index.css';
 
 const queryClient = new QueryClient();
@@ -33,6 +34,10 @@ function Layout({ children }: { children: React.ReactNode }) {
             <AlertTriangle size={20} className="text-red-400" />
             Anomaly Alerts
           </Link>
+          <Link to="/blending" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors">
+            <Layers size={20} className="text-indigo-400" />
+            Blend Optimizer
+          </Link>
           <Link to="/insights" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors">
             <BrainCircuit size={20} className="text-purple-400" />
             AI Insights
@@ -59,6 +64,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/samples" element={<SamplesList />} />
             <Route path="/anomalies" element={<AnomalyDetection />} />
+            <Route path="/blending" element={<BlendingOptimizer />} />
             <Route path="/insights" element={<AIInsights />} />
           </Routes>
         </Layout>
