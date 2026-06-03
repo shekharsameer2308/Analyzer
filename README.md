@@ -1,148 +1,135 @@
-# CoalLab AI: Enterprise Coal Quality Analytics & Blending Optimization
+# CoalLab AI: Intelligent Quality Analytics & Blending Optimization
 
-CoalLab AI is a mission-critical Machine Learning and Quality Analytics Platform architected to transform industrial coal quality assessment. By synthesizing real-time telemetry with predictive modeling and prescriptive analytics, the platform facilitates automated anomaly detection, optimizes resource blending ratios, and delivers actionable, data-driven insights for high-throughput coal processing facilities.
+CoalLab AI is an enterprise-grade Machine Learning and Quality Analytics Platform engineered to modernize industrial coal quality assessment. By synthesizing real-time telemetry with predictive modeling and prescriptive analytics, the system automates anomaly detection, optimizes blending ratios, and provides actionable, data-driven insights for high-throughput coal processing facilities.
 
-## Core System Architecture & Data Pipeline
+## System Architecture
 
-The platform is designed around a decoupled, highly scalable service-oriented architecture. It leverages a modern React presentation layer for real-time visualization and a robust Python/FastAPI engine for heavy mathematical optimization and machine learning inference.
+The platform implements a decoupled, highly scalable service-oriented architecture. It integrates a React-based presentation layer for real-time visualization with a robust Python/FastAPI backend for high-performance mathematical optimization and machine learning inference.
 
 ```mermaid
 graph TD
-    %% Define Node Styles
-    classDef client fill:#0a0a0a,stroke:#27272a,stroke-width:2px,color:#e4e4e7,rx:8px,ry:8px;
-    classDef frontend fill:#18181b,stroke:#3f3f46,stroke-width:1px,color:#f4f4f5,rx:4px,ry:4px;
-    classDef gateway fill:#0f172a,stroke:#334155,stroke-width:2px,color:#f8fafc,rx:8px,ry:8px;
-    classDef mlEngine fill:#1e1b4b,stroke:#4338ca,stroke-width:1px,color:#e0e7ff,rx:4px,ry:4px;
-    classDef dataStore fill:#2e1065,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff,rx:8px,ry:8px;
+    classDef client fill:#0f172a,stroke:#334155,stroke-width:2px,color:#f8fafc;
+    classDef gateway fill:#1e1b4b,stroke:#4338ca,stroke-width:2px,color:#e0e7ff;
+    classDef engine fill:#3b0764,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
+    classDef db fill:#064e3b,stroke:#047857,stroke-width:2px,color:#d1fae5;
 
-    %% Client and Edge
-    User([Industrial Operations Manager])
-    style User fill:#050505,stroke:#52525b,color:#fff
-    
-    subgraph Edge [Edge Delivery Network - Vercel]
-        UI[React 19 Dashboard UI]
-        State[TanStack Query State Management]
-        Viz[Plotly.js Data Visualization]
-        UI --> State
-        UI --> Viz
+    subgraph Client [Presentation Layer - Vercel Edge]
+        UI[React 19 SPA] --> State[TanStack Query]
+        State --> Viz[Plotly.js Visualizations]
     end
 
-    User -->|HTTPS/WSS| UI
-
-    %% Application API Gateway
-    subgraph CoreAPI [Core Services Gateway - Render]
-        FastAPI[FastAPI Asynchronous Gateway]
-        Pydantic[Pydantic Data Validation]
-        ORM[SQLAlchemy ORM Layer]
-        
-        FastAPI --> Pydantic
-        Pydantic --> ORM
+    subgraph Server [Core API Gateway - Render Services]
+        FastAPI[FastAPI Async Server] --> Validator[Pydantic Validation]
+        Validator --> ORM[SQLAlchemy ORM]
     end
 
-    State <-->|RESTful JSON Payloads| FastAPI
-
-    %% Machine Learning Inference Engine
-    subgraph AI [Machine Learning Inference Engine]
-        Anomaly[Isolation Forest: Anomaly Detection]
-        Predictor[XGBoost: GCV Prediction]
-        Optimizer[SciPy: Linear Blending Optimizer]
-        
-        FastAPI --> Anomaly
-        FastAPI --> Predictor
-        FastAPI --> Optimizer
+    subgraph ML [Machine Learning Inference]
+        IsolationForest[Isolation Forest: Anomaly Detection]
+        XGBoost[XGBoost: GCV Regression]
+        SciPy[SciPy: Linear Blending Optimizer]
     end
 
-    %% Data Persistence
-    subgraph Storage [Persistent Storage]
-        DB[(PostgreSQL / SQLite)]
+    subgraph Storage [Persistence]
+        Database[(Relational Database)]
     end
 
-    ORM <-->|SQL Queries| DB
+    State <-->|REST / JSON| FastAPI
+    FastAPI --> IsolationForest
+    FastAPI --> XGBoost
+    FastAPI --> SciPy
+    ORM <--> Database
 
-    %% Apply Classes
-    class UI,State,Viz frontend;
-    class FastAPI,Pydantic,ORM gateway;
-    class Anomaly,Predictor,Optimizer mlEngine;
-    class DB dataStore;
-    class Edge,CoreAPI,AI,Storage client;
+    class UI,State,Viz client;
+    class FastAPI,Validator,ORM gateway;
+    class IsolationForest,XGBoost,SciPy engine;
+    class Database db;
 ```
 
-## Production Deployment Infrastructure
+## Data Ingestion & Machine Learning Pipeline
 
-The system employs cloud-native continuous deployment pipelines ensuring zero-downtime updates and high availability across the stack.
+The application ingests high-frequency coal quality metrics, validates the payloads through strict data contracts, and executes machine learning inferences synchronously.
 
-- **Frontend Interface:** [CoalLab AI Production Dashboard](https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app)
-  - *Infrastructure:* Vercel Edge Network
-- **Backend Services:** [CoalLab AI API Endpoint](https://coallab-api.onrender.com/api/v1)
-  - *Infrastructure:* Render Web Services
+```mermaid
+sequenceDiagram
+    participant Sensor as IoT / Lab Input
+    participant API as FastAPI Gateway
+    participant DB as Database
+    participant ML as ML Engine (Scikit-Learn)
 
-## Comprehensive Technology Stack
+    Sensor->>API: POST /api/v1/samples (Moisture, Ash, GCV)
+    API->>API: Pydantic Schema Validation
+    API->>DB: Persist Raw Telemetry
+    DB-->>API: Acknowledge Transaction
+    
+    API->>ML: Trigger Anomaly Inference
+    ML->>ML: Execute Isolation Forest
+    ML-->>API: Return Anomaly Score (0-100)
+    
+    API-->>Sensor: 201 Created (Include ML Insights)
+```
 
-Constructed as an integrated monorepo, the repository streamlines continuous integration, deterministic builds, and synchronized deployment between the client and server boundaries.
+## Technology Stack Specifications
 
-### Client Presentation Layer
-- **Core Framework:** React 19 operating as a heavily optimized Single Page Application (SPA), bundled via Vite.
-- **Styling Architecture:** Tailwind CSS v4, executing a sophisticated dark-mode aesthetic utilizing bespoke glassmorphism, radial gradient glows, and high-contrast typography.
-- **Data Synchronization:** TanStack React Query orchestrates server-state caching, background re-fetching, and optimistic UI updates.
-- **Data Visualization:** Plotly.js renders dense multi-dimensional datasets into responsive, interactive charts (including custom gauge and distribution visualizations).
+### Frontend Application (Client)
+- **Framework:** React 19 (Single Page Application)
+- **Build System:** Vite
+- **Styling:** Tailwind CSS v4 (Strict dark-mode constraints, glassmorphism)
+- **State Management:** TanStack React Query (Server-state synchronization)
+- **Visualization:** Plotly.js (Multidimensional analytics rendering)
 
-### Server Application Layer
-- **API Framework:** FastAPI running on Python 3.12, providing high-throughput asynchronous endpoints and automatic OpenAPI (Swagger) schema generation.
-- **Data Persistence:** SQLAlchemy serves as the Object-Relational Mapper (ORM), securely abstracting database transactions.
-- **Data Integrity:** Pydantic enforces strict runtime type checking and serialization of all ingress and egress payloads.
-- **Machine Learning Core:** Leveraging Scikit-Learn, XGBoost, Pandas, and NumPy for predictive modeling, matrix transformations, and optimization heuristics.
+### Backend Services (Server)
+- **API Framework:** FastAPI (Python 3.12, ASGI compliant)
+- **Data Serialization:** Pydantic v2
+- **ORM:** SQLAlchemy 2.0
+- **Machine Learning Dependencies:** 
+  - `scikit-learn` (Isolation Forest)
+  - `xgboost` (Gradient Boosting Regression)
+  - `pandas` & `numpy` (Vectorized data transformations)
+  - `scipy` (Linear programming optimization)
 
-## Local Development Initialization
+## Production Infrastructure
 
-To instantiate the platform within an isolated local development environment, proceed with the following strict configuration protocols. Ensure the host machine is provisioned with Node.js (v18.0.0+) and Python (3.10 - 3.12).
+Continuous Integration and Continuous Deployment (CI/CD) pipelines ensure zero-downtime provisioning across isolated environments.
 
-### 1. Backend Service Provisioning
+- **Frontend Deployment:** [CoalLab AI Dashboard](https://analyzer-self.vercel.app) (Vercel Edge Network)
+- **Backend Services:** [CoalLab API](https://coallab-api.onrender.com/api/v1) (Render Web Services)
 
-Navigate to the `backend` directory to establish the isolated Python environment and boot the FastAPI server.
+## Local Development Configuration
 
+To establish a local development environment, execute the following instructions. Ensure Node.js (v18+) and Python (3.10+) are installed on the host operating system.
+
+### 1. Initialize Backend API
 ```bash
 cd backend
 python -m venv venv
 
-# Windows Environment Activation
+# Windows Activation
 venv\Scripts\activate
-# Unix/MacOS Environment Activation
+# Unix/MacOS Activation
 # source venv/bin/activate
 
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
-Upon successful execution, the backend service binds to `http://localhost:8000`.
+The FastAPI instance will bind to `http://localhost:8000`.
 
-### 2. Frontend Interface Provisioning
-
-In a parallel terminal session, navigate to the `frontend` directory to install package dependencies and launch the Vite Hot-Module Replacement (HMR) server.
-
+### 2. Initialize Frontend Client
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The client interface initializes and becomes accessible at `http://localhost:5173`.
+The Vite development server will initialize at `http://localhost:5173`.
 
-## Database Seeding Protocols
-
-A newly initialized or ephemeral database requires seed data to populate the dashboard analytics. The system exposes an administrative endpoint to programmatically generate and ingest synthetic coal sample records (n=50).
-
-Execute the seeding operation locally:
+### 3. Database Seeding
+To populate the SQLite database with synthetic development data (n=50), execute the administrative seed endpoint:
 ```bash
 curl -X POST http://localhost:8000/seed
 ```
 
-Execute the seeding operation against the production cluster:
-```bash
-curl -X POST https://coallab-api.onrender.com/seed
-```
+## Strategic Implementation Roadmap
 
-## Strategic Machine Learning Roadmap
-
-The platform architecture is designed to accommodate continuous iteration, specifically concerning its prescriptive analytics capabilities:
-
-1. **[COMPLETED] Phase 2:** Deployment of **Isolation Forest** algorithms to automate the identification of statistical anomalies within routine coal sample properties (e.g., detecting impossible moisture-to-ash ratios).
-2. **Phase 3:** Integration of trained **XGBoost** regression models to predict Gross Calorific Value (GCV) strictly utilizing foundational metrics, thereby reducing the necessity for expensive laboratory bomb calorimetry.
-3. **Phase 4:** Development of a programmatic **Coal Blending Optimizer** applying Linear Programming (via SciPy Optimize) to mathematically calculate the most efficient feed ratios from disparate source mines to achieve target operational GCV specifications at minimum cost.
+1. **[COMPLETED] Phase 1:** Core infrastructure deployment, RESTful API design, and React dashboard initialization.
+2. **[COMPLETED] Phase 2:** Integration of **Isolation Forest** algorithms for automated statistical anomaly detection across multi-variable coal properties.
+3. **[PENDING] Phase 3:** Implementation of **XGBoost** regression models to accurately predict Gross Calorific Value (GCV) utilizing fundamental physical metrics.
+4. **[PENDING] Phase 4:** Development of a mathematical **Coal Blending Optimizer** applying SciPy Linear Programming to calculate maximum-efficiency feed ratios.
