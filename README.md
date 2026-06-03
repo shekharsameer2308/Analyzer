@@ -1,130 +1,114 @@
+<div align="center">
+  <img src="./frontend/public/hero.png" alt="CoalLab AI Hero Image" width="800" />
+</div>
+
+<br />
+
 # CoalLab AI: Intelligent Quality Analytics & Blending Optimization
 
 CoalLab AI is an enterprise-grade Machine Learning and Quality Analytics Platform engineered to modernize industrial coal quality assessment. By synthesizing real-time telemetry with predictive modeling and prescriptive analytics, the system automates anomaly detection, optimizes blending ratios, and provides actionable, data-driven insights for high-throughput coal processing facilities.
 
-## System Architecture
+---
 
-The platform implements a decoupled, highly scalable service-oriented architecture. It integrates a React-based presentation layer for real-time visualization with a robust Python/FastAPI backend for high-performance mathematical optimization and machine learning inference.
+## Live Demo
+
+Experience the live production application and the real-time AI inference capabilities deployed at the edge.
+
+* **Frontend Production URL:** [https://analyzer-self.vercel.app](https://analyzer-self.vercel.app)
+* **Backend API Gateway:** [https://coallab-api.onrender.com/api/v1](https://coallab-api.onrender.com/api/v1)
+
+*(Note: The backend API runs on a serverless container that may spin down during inactivity; please allow 30-50 seconds for the initial cold boot.)*
+
+---
+
+## Tech Stack
+
+The platform is designed around a decoupled, highly scalable service-oriented architecture utilizing a modern, type-safe stack.
+
+### Frontend Application (Client)
+* **React 19:** Optimized Single Page Application (SPA).
+* **Vite:** High-performance bundling and Hot Module Replacement.
+* **Tailwind CSS v4:** Strict dark-mode styling utilizing glassmorphism and modern UI components.
+* **TanStack React Query:** Asynchronous server-state synchronization and caching.
+* **Plotly.js:** High-density, multidimensional data visualization.
+* **Lucide React:** Minimalist, consistent icon system.
+
+### Backend Services (Server)
+* **Python 3.12:** High-performance runtime.
+* **FastAPI:** Asynchronous API routing and OpenAPI (Swagger) generation.
+* **SQLAlchemy 2.0:** Object-Relational Mapping (ORM) and robust database transactions.
+* **Pydantic v2:** Strict runtime data serialization and schema validation.
+* **Scikit-Learn:** Core machine learning algorithms (Isolation Forest).
+* **XGBoost:** Gradient boosting regression models.
+
+---
+
+## Deployment Architecture
+
+Continuous Integration and Continuous Deployment (CI/CD) pipelines ensure zero-downtime provisioning across isolated environments. The frontend is pushed to a global edge network, while the backend is deployed as a scalable container.
 
 ```mermaid
 graph TD
     classDef client fill:#0f172a,stroke:#334155,stroke-width:2px,color:#f8fafc;
     classDef gateway fill:#1e1b4b,stroke:#4338ca,stroke-width:2px,color:#e0e7ff;
     classDef engine fill:#3b0764,stroke:#7e22ce,stroke-width:2px,color:#f3e8ff;
-    classDef db fill:#064e3b,stroke:#047857,stroke-width:2px,color:#d1fae5;
 
-    subgraph Client [Presentation Layer - Vercel Edge]
-        UI[React 19 SPA] --> State[TanStack Query]
-        State --> Viz[Plotly.js Visualizations]
+    subgraph Client [Vercel Edge Network]
+        UI[React 19 Dashboard] --> State[TanStack Query]
     end
 
-    subgraph Server [Core API Gateway - Render Services]
-        FastAPI[FastAPI Async Server] --> Validator[Pydantic Validation]
-        Validator --> ORM[SQLAlchemy ORM]
+    subgraph Server [Render Web Services]
+        API[FastAPI Server] --> ORM[SQLAlchemy]
+        API --> ML[Machine Learning Core]
     end
 
-    subgraph ML [Machine Learning Inference]
-        IsolationForest[Isolation Forest: Anomaly Detection]
-        XGBoost[XGBoost: GCV Regression]
-        SciPy[SciPy: Linear Blending Optimizer]
+    subgraph Database [Persistence]
+        DB[(PostgreSQL / SQLite)]
     end
 
-    subgraph Storage [Persistence]
-        Database[(Relational Database)]
-    end
+    State <-->|HTTPS / REST| API
+    ORM <--> DB
 
-    State <-->|REST / JSON| FastAPI
-    FastAPI --> IsolationForest
-    FastAPI --> XGBoost
-    FastAPI --> SciPy
-    ORM <--> Database
-
-    class UI,State,Viz client;
-    class FastAPI,Validator,ORM gateway;
-    class IsolationForest,XGBoost,SciPy engine;
-    class Database db;
+    class UI,State client;
+    class API,ORM gateway;
+    class ML engine;
 ```
+
+**Architectural Flow:**
+1. **Client Request:** The user interacts with the React Dashboard hosted on the Vercel Edge Network.
+2. **State Management:** TanStack Query intercepts the request and issues an asynchronous HTTP payload to the backend.
+3. **API Routing:** The FastAPI Gateway hosted on Render intercepts the payload and routes it for validation.
+4. **Data Persistence / ML Inference:** The backend either queries the Database via SQLAlchemy or runs inference through the Machine Learning Core.
+
+---
 
 ## Data Ingestion & Machine Learning Pipeline
 
-The application ingests high-frequency coal quality metrics, validates the payloads through strict data contracts, and executes machine learning inferences synchronously.
+The application ingests high-frequency coal quality metrics, validates the payloads through strict data contracts, and executes machine learning inferences synchronously to detect anomalous readings in real-time.
 
 ```mermaid
 sequenceDiagram
-    participant Sensor as IoT / Lab Input
-    participant API as FastAPI Gateway
-    participant DB as Database
-    participant ML as ML Engine (Scikit-Learn)
+    participant Sensor as External Input / Sensor
+    participant API as FastAPI Backend
+    participant DB as Relational Database
+    participant ML as ML Engine (Isolation Forest)
 
     Sensor->>API: POST /api/v1/samples (Moisture, Ash, GCV)
-    API->>API: Pydantic Schema Validation
+    API->>API: Pydantic Strict Validation
     API->>DB: Persist Raw Telemetry
-    DB-->>API: Acknowledge Transaction
+    DB-->>API: Confirm Transaction
     
     API->>ML: Trigger Anomaly Inference
-    ML->>ML: Execute Isolation Forest
+    ML->>ML: Compute Isolation Forest Metrics
     ML-->>API: Return Anomaly Score (0-100)
     
-    API-->>Sensor: 201 Created (Include ML Insights)
+    API-->>Sensor: 201 Created (Include AI Insights)
 ```
 
-## Technology Stack Specifications
-
-### Frontend Application (Client)
-- **Framework:** React 19 (Single Page Application)
-- **Build System:** Vite
-- **Styling:** Tailwind CSS v4 (Strict dark-mode constraints, glassmorphism)
-- **State Management:** TanStack React Query (Server-state synchronization)
-- **Visualization:** Plotly.js (Multidimensional analytics rendering)
-
-### Backend Services (Server)
-- **API Framework:** FastAPI (Python 3.12, ASGI compliant)
-- **Data Serialization:** Pydantic v2
-- **ORM:** SQLAlchemy 2.0
-- **Machine Learning Dependencies:** 
-  - `scikit-learn` (Isolation Forest)
-  - `xgboost` (Gradient Boosting Regression)
-  - `pandas` & `numpy` (Vectorized data transformations)
-  - `scipy` (Linear programming optimization)
-
-## Production Infrastructure
-
-Continuous Integration and Continuous Deployment (CI/CD) pipelines ensure zero-downtime provisioning across isolated environments.
-
-- **Frontend Deployment:** [CoalLab AI Dashboard](https://analyzer-self.vercel.app) (Vercel Edge Network)
-- **Backend Services:** [CoalLab API](https://coallab-api.onrender.com/api/v1) (Render Web Services)
-
-## Local Development Configuration
-
-To establish a local development environment, execute the following instructions. Ensure Node.js (v18+) and Python (3.10+) are installed on the host operating system.
-
-### 1. Initialize Backend API
-```bash
-cd backend
-python -m venv venv
-
-# Windows Activation
-venv\Scripts\activate
-# Unix/MacOS Activation
-# source venv/bin/activate
-
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-The FastAPI instance will bind to `http://localhost:8000`.
-
-### 2. Initialize Frontend Client
-```bash
-cd frontend
-npm install
-npm run dev
-```
-The Vite development server will initialize at `http://localhost:5173`.
-
-### 3. Database Seeding
-To populate the SQLite database with synthetic development data (n=50), execute the administrative seed endpoint:
-```bash
-curl -X POST http://localhost:8000/seed
-```
-
-
+**Pipeline Explanation:**
+1. **Ingestion:** Telemetry data is sent to the FastAPI backend.
+2. **Validation:** Pydantic strictly enforces data types and constraints.
+3. **Persistence:** The raw, unanalyzed data is saved to the database.
+4. **Inference:** The data is forwarded to the `scikit-learn` Isolation Forest algorithm.
+5. **Scoring:** The algorithm calculates an Anomaly Score (0-100) based on multidimensional feature relationships.
+6. **Response:** The categorized data and scores are returned to the client dashboard.
