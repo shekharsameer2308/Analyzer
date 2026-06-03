@@ -127,9 +127,4 @@ To populate the SQLite database with synthetic development data (n=50), execute 
 curl -X POST http://localhost:8000/seed
 ```
 
-## Strategic Implementation Roadmap
 
-1. **[COMPLETED] Phase 1:** Core infrastructure deployment, RESTful API design, and React dashboard initialization.
-2. **[COMPLETED] Phase 2:** Integration of **Isolation Forest** algorithms for automated statistical anomaly detection across multi-variable coal properties.
-3. **[PENDING] Phase 3:** Implementation of **XGBoost** regression models to accurately predict Gross Calorific Value (GCV) utilizing fundamental physical metrics.
-4. **[PENDING] Phase 4:** Development of a mathematical **Coal Blending Optimizer** applying SciPy Linear Programming to calculate maximum-efficiency feed ratios.
