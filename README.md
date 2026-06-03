@@ -143,6 +143,6 @@ curl -X POST https://coallab-api.onrender.com/seed
 
 The platform architecture is designed to accommodate continuous iteration, specifically concerning its prescriptive analytics capabilities:
 
-1. **Phase 2:** Deployment of **Isolation Forest** algorithms to automate the identification of statistical anomalies within routine coal sample properties (e.g., detecting impossible moisture-to-ash ratios).
+1. **[COMPLETED] Phase 2:** Deployment of **Isolation Forest** algorithms to automate the identification of statistical anomalies within routine coal sample properties (e.g., detecting impossible moisture-to-ash ratios).
 2. **Phase 3:** Integration of trained **XGBoost** regression models to predict Gross Calorific Value (GCV) strictly utilizing foundational metrics, thereby reducing the necessity for expensive laboratory bomb calorimetry.
 3. **Phase 4:** Development of a programmatic **Coal Blending Optimizer** applying Linear Programming (via SciPy Optimize) to mathematically calculate the most efficient feed ratios from disparate source mines to achieve target operational GCV specifications at minimum cost.
