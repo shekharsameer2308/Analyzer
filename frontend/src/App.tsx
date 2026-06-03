@@ -5,7 +5,8 @@ import SamplesList from './pages/SamplesList';
 import AIInsights from './pages/AIInsights';
 import AnomalyDetection from './pages/AnomalyDetection';
 import BlendingOptimizer from './pages/BlendingOptimizer';
-import { LayoutDashboard, Database, BrainCircuit, AlertTriangle, Layers, Search, Bell, Settings, HelpCircle, User } from 'lucide-react';
+import GCVPredictor from './pages/GCVPredictor';
+import { LayoutDashboard, Database, BrainCircuit, AlertTriangle, Layers, Search, Bell, Settings, HelpCircle, User, Zap } from 'lucide-react';
 import './index.css';
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ function Layout({ children }: { children: React.ReactNode }) {
             <SidebarLink to="/anomalies" icon={<AlertTriangle size={18} />} label="Anomaly Alerts" />
             <SidebarLink to="/blending" icon={<Layers size={18} />} label="Blend Optimizer" />
             <SidebarLink to="/insights" icon={<BrainCircuit size={18} />} label="AI Insights" />
+            <SidebarLink to="/predict" icon={<Zap size={18} />} label="GCV Predictor" />
           </div>
 
           <div className="mb-6">
@@ -111,6 +113,7 @@ function App() {
             <Route path="/anomalies" element={<AnomalyDetection />} />
             <Route path="/blending" element={<BlendingOptimizer />} />
             <Route path="/insights" element={<AIInsights />} />
+            <Route path="/predict" element={<GCVPredictor />} />
           </Routes>
         </Layout>
       </Router>
