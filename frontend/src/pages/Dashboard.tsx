@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Plot from 'react-plotly.js';
-import { Database, Flame, Activity, BarChart3, MoreVertical, TrendingUp, TrendingDown, Info } from 'lucide-react';
+import { Database, Flame, Activity, MoreVertical, TrendingDown, Info } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 

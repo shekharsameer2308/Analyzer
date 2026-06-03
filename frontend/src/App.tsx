@@ -5,7 +5,7 @@ import SamplesList from './pages/SamplesList';
 import AIInsights from './pages/AIInsights';
 import AnomalyDetection from './pages/AnomalyDetection';
 import BlendingOptimizer from './pages/BlendingOptimizer';
-import { LayoutDashboard, Database, BrainCircuit, Activity, AlertTriangle, Layers, Search, Bell, Settings, HelpCircle, User } from 'lucide-react';
+import { LayoutDashboard, Database, BrainCircuit, AlertTriangle, Layers, Search, Bell, Settings, HelpCircle, User } from 'lucide-react';
 import './index.css';
 
 const queryClient = new QueryClient();
