@@ -1,88 +1,104 @@
-# 💎 CoalLab AI
+# CoalLab AI
 
-**CoalLab AI** is an advanced Machine Learning & Quality Analytics Platform designed to revolutionize coal quality assessment. By combining real-time data feeds, predictive modeling (XGBoost/Isolation Forests), and modern frontend architecture, CoalLab AI detects anomalies, optimizes blending ratios, and provides deep AI insights into coal processing.
+CoalLab AI is an advanced Machine Learning and Quality Analytics Platform designed to modernize coal quality assessment. By integrating real-time data feeds with predictive modeling, CoalLab AI aims to detect anomalies, optimize blending ratios, and provide actionable insights into coal processing.
 
----
+## System Architecture
 
-## 🚀 Live Demo
+The following diagram illustrates the high-level architecture of the CoalLab AI platform, separating the client-side dashboard from the server-side machine learning engine.
 
-- **Frontend Dashboard:** [https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app](https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app)
-- **Backend API:** `https://coallab-api.onrender.com/api/v1`
+```mermaid
+graph TD
+    subgraph Client [Frontend Layer]
+        A[React SPA / Vite] --> B[Tailwind CSS v4]
+        A --> C[TanStack Query]
+        C -->|HTTP/REST| D
+    end
 
----
+    subgraph Server [Backend API Layer]
+        D[FastAPI Server] --> E[Machine Learning Engine]
+        D --> F[Database ORM]
+        E --> G[Isolation Forest Anomaly Detection]
+        E --> H[XGBoost Predictors]
+        F --> I[(SQLite / PostgreSQL)]
+    end
 
-## 🏗️ Architecture & Tech Stack
+    classDef client fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px;
+    classDef server fill:#f0fdf4,stroke:#86efac,stroke-width:2px;
+    class A,B,C client;
+    class D,E,F,G,H,I server;
+```
 
-This repository is structured as a **Monorepo** containing both the React frontend and the Python backend.
+## Live Deployment
 
-### 1. Frontend (`/frontend`)
-The presentation layer is a blazing fast Single Page Application (SPA) built with modern web technologies:
-* **Framework:** React 19 + Vite
-* **Styling:** Tailwind CSS v4
-* **Data Fetching:** TanStack React Query & Axios
-* **Icons & UI:** Lucide React
-* **Data Visualization:** Plotly.js
-* **Hosting:** Vercel
+- **Frontend Dashboard:** [CoalLab AI Vercel Deployment](https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app)
+- **Backend API:** [CoalLab AI Render Endpoint](https://coallab-api.onrender.com/api/v1)
 
-### 2. Backend (`/backend`)
-The engine powering the machine learning predictions and database management:
-* **Framework:** FastAPI (Python 3.12)
-* **Database:** SQLite / PostgreSQL (via SQLAlchemy)
-* **Data Validation:** Pydantic
-* **Hosting:** Render Web Services
+## Technology Stack
 
----
+This repository is structured as a monorepo containing both the React presentation layer and the Python backend engine.
 
-## 🛠️ Local Development Guide
+### Frontend
+- **Framework:** React 19 + Vite
+- **Styling:** Tailwind CSS v4
+- **State Management & Fetching:** TanStack React Query, Axios
+- **Visualization:** Plotly.js
+- **Deployment:** Vercel
 
-To run this platform locally on your own machine, follow these steps:
+### Backend
+- **Framework:** FastAPI (Python 3.12)
+- **Database Management:** SQLAlchemy
+- **Data Validation:** Pydantic
+- **Deployment:** Render Web Services
 
-### Prerequisites
-- Node.js (v18 or higher)
-- Python (3.10 to 3.12 recommended)
-- Git
+## Local Setup and Installation
 
-### 1. Start the Backend API
-Open a terminal and navigate to the backend directory:
+To run the platform locally, follow these instructions. Ensure you have Node.js (v18+) and Python (3.10-3.12) installed on your system.
+
+### 1. Initialize the Backend API
+
+Navigate to the backend directory, construct a virtual environment, and install the required dependencies:
+
 ```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate      # Windows
-# source venv/bin/activate # Mac/Linux
+
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+# source venv/bin/activate
 
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
-*The API will be available at `http://localhost:8000`*
+The API will initialize and bind to `http://localhost:8000`.
 
-### 2. Start the Frontend Dashboard
-Open a second terminal and navigate to the frontend directory:
+### 2. Initialize the Frontend Dashboard
+
+Open a separate terminal instance, navigate to the frontend directory, and start the development server:
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-*The Dashboard will be available at `http://localhost:5173`*
+The application will be accessible at `http://localhost:5173`.
 
----
+## Database Seeding
 
-## 🧪 Seeding the Database
-If your database is empty, you can populate it with 50 generated coal samples by making a POST request to the seed endpoint.
-If running locally:
+To populate the database with an initial dataset of 50 generated coal samples, execute a POST request against the seed endpoint. 
+
+For a local environment:
 ```bash
 curl -X POST http://localhost:8000/seed
 ```
-If running in production:
+
+For the production environment:
 ```bash
 curl -X POST https://coallab-api.onrender.com/seed
 ```
 
----
+## Future Roadmap
 
-## 🔮 Future Roadmap (Machine Learning)
-- [ ] **Phase 2:** Integrate Isolation Forest for automated anomaly detection in coal sample properties.
-- [ ] **Phase 3:** Deploy XGBoost models to predict Gross Calorific Value (GCV) based on moisture and ash content.
-- [ ] **Phase 4:** Develop the Coal Blending Optimizer (Linear Programming / Scipy Optimize) to recommend optimal mixture ratios for target GCVs.
-
----
-*Built with ❤️ for the future of resource analytics.*
+1. **Phase 2:** Integrate Isolation Forest algorithms for automated anomaly detection regarding coal sample properties.
+2. **Phase 3:** Deploy XGBoost models to predict Gross Calorific Value (GCV) utilizing moisture and ash content metrics.
+3. **Phase 4:** Develop a Coal Blending Optimizer (utilizing Linear Programming and SciPy Optimize) to calculate recommended mixture ratios for target GCVs.
