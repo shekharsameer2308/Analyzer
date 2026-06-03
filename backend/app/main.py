@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import samples, analytics
+from app.api.v1 import samples, analytics, ml
 from app.core.database import engine, Base
 from app.models import coal_sample, user
 
@@ -24,6 +24,7 @@ app.add_middleware(
 
 app.include_router(samples.router, prefix=f"{settings.API_V1_STR}/samples", tags=["samples"])
 app.include_router(analytics.router, prefix=f"{settings.API_V1_STR}/analytics", tags=["analytics"])
+app.include_router(ml.router, prefix=f"{settings.API_V1_STR}/ml", tags=["ml"])
 
 @app.get("/")
 def root():
