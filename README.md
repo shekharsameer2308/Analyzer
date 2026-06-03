@@ -273,28 +273,4 @@ npm run dev
 - **Output Directory:** `dist`
 - **Environmental Variables:** `VITE_API_URL` configured to point to the live Render backend endpoint.
 
----
 
-## Visual Interface Gallery
-
-Below are actual interface captures from the CoalLab AI analytics platform:
-
-### Dashboard Analytics Overview
-Detailed monitoring of coal metrics, including Ash vs. Moisture scatter plots and parameter histograms.
-![Dashboard Overview](./docs/assets/screenshot5.png)
-
-### Real-Time Quality Telemetry Management
-Full relational inventory listing of raw coal telemetry samples.
-![Coal Samples Management](./docs/assets/screenshot2.png)
-
-### Isolation Forest Anomaly Detection Dashboard
-Visual indicators highlighting statistical outliers and sensor drift readings.
-![Anomaly Detection Dashboard](./docs/assets/screenshot3.png)
-
-### Prescriptive Coal Blending Optimization Console
-Mathematical calculations determining cost-effective mixing ratios.
-![Blending Optimization Console](./docs/assets/screenshot4.png)
-
-### AI-Powered Analytical Insights
-Natural language feedback explaining sample variations and performance insights.
-![AI-Powered Analytical Insights](./docs/assets/screenshot1.png)
