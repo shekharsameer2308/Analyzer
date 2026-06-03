@@ -1,104 +1,145 @@
-# CoalLab AI
+# CoalLab AI: Intelligent Coal Quality Analytics Platform
 
-CoalLab AI is an advanced Machine Learning and Quality Analytics Platform designed to modernize coal quality assessment. By integrating real-time data feeds with predictive modeling, CoalLab AI aims to detect anomalies, optimize blending ratios, and provide actionable insights into coal processing.
+CoalLab AI is an enterprise-grade Machine Learning and Quality Analytics Platform architected to modernize coal quality assessment. By integrating real-time telemetry with advanced predictive modeling, the system facilitates automated anomaly detection, optimizes resource blending ratios, and delivers actionable, data-driven insights for industrial coal processing.
 
 ## System Architecture
 
-The following diagram illustrates the high-level architecture of the CoalLab AI platform, separating the client-side dashboard from the server-side machine learning engine.
+The platform follows a decoupled, service-oriented architecture, distinguishing between a high-performance client presentation layer and a robust, scalable server-side machine learning engine.
 
 ```mermaid
 graph TD
-    subgraph Client [Frontend Layer]
-        A[React SPA / Vite] --> B[Tailwind CSS v4]
-        A --> C[TanStack Query]
-        C -->|HTTP/REST| D
+    %% User Interaction
+    User((End User)) -->|HTTPS / WSS| Dashboard
+    
+    %% Client-Side Architecture (Frontend)
+    subgraph Frontend [Presentation Layer - Vercel]
+        Dashboard[React SPA]
+        State[TanStack Query]
+        UI[Tailwind CSS / UI Components]
+        Charts[Plotly.js Visualizations]
+        
+        Dashboard --> State
+        Dashboard --> UI
+        Dashboard --> Charts
     end
-
-    subgraph Server [Backend API Layer]
-        D[FastAPI Server] --> E[Machine Learning Engine]
-        D --> F[Database ORM]
-        E --> G[Isolation Forest Anomaly Detection]
-        E --> H[XGBoost Predictors]
-        F --> I[(SQLite / PostgreSQL)]
+    
+    %% Server-Side Architecture (Backend)
+    subgraph Backend [Application & ML Layer - Render]
+        API[FastAPI Gateway]
+        Auth[Authentication & Validation]
+        ORM[SQLAlchemy ORM]
+        
+        subgraph ML_Engine [Machine Learning Engine]
+            ScikitLearn[Scikit-Learn Processing]
+            IsolationForest[Isolation Forest / Anomaly Detection]
+            XGBoost[XGBoost / Predictive Modeling]
+            Optimizer[SciPy Linear Optimizer]
+            
+            ScikitLearn --> IsolationForest
+            ScikitLearn --> XGBoost
+            ScikitLearn --> Optimizer
+        end
+        
+        API --> Auth
+        Auth --> ORM
+        Auth --> ML_Engine
     end
-
-    classDef client fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px;
-    classDef server fill:#f0fdf4,stroke:#86efac,stroke-width:2px;
-    class A,B,C client;
-    class D,E,F,G,H,I server;
+    
+    %% Data Persistence
+    subgraph Storage [Data Persistence Layer]
+        DB[(Relational Database)]
+    end
+    
+    %% Connections
+    State <-->|REST API / JSON| API
+    ORM <-->|SQL Queries| DB
+    
+    %% Styling
+    classDef client fill:#f8fafc,stroke:#cbd5e1,stroke-width:1px;
+    classDef server fill:#f0fdf4,stroke:#86efac,stroke-width:1px;
+    classDef engine fill:#eff6ff,stroke:#bfdbfe,stroke-width:1px;
+    classDef database fill:#fdf4ff,stroke:#f5d0fe,stroke-width:1px;
+    
+    class Frontend,Dashboard,State,UI,Charts client;
+    class Backend,API,Auth,ORM server;
+    class ML_Engine,ScikitLearn,IsolationForest,XGBoost,Optimizer engine;
+    class Storage,DB database;
 ```
 
-## Live Deployment
+## Production Deployment Environment
 
-- **Frontend Dashboard:** [CoalLab AI Vercel Deployment](https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app)
-- **Backend API:** [CoalLab AI Render Endpoint](https://coallab-api.onrender.com/api/v1)
+The system relies on cloud-native deployment pipelines to ensure high availability and continuous delivery.
 
-## Technology Stack
+- **Frontend Interface:** [CoalLab AI Production Dashboard](https://frontend-16thqsm9y-shekharsameer2308s-projects.vercel.app) (Hosted on Vercel Edge Network)
+- **Backend Services:** [CoalLab AI API Endpoint](https://coallab-api.onrender.com/api/v1) (Hosted on Render Web Services)
 
-This repository is structured as a monorepo containing both the React presentation layer and the Python backend engine.
+## Comprehensive Technology Stack
 
-### Frontend
-- **Framework:** React 19 + Vite
-- **Styling:** Tailwind CSS v4
-- **State Management & Fetching:** TanStack React Query, Axios
-- **Visualization:** Plotly.js
-- **Deployment:** Vercel
+This repository utilizes a monorepo structure to streamline continuous integration and deployment processes across both the frontend and backend boundaries.
 
-### Backend
-- **Framework:** FastAPI (Python 3.12)
-- **Database Management:** SQLAlchemy
-- **Data Validation:** Pydantic
-- **Deployment:** Render Web Services
+### Client Presentation Layer
+- **Core Framework:** React 19 functioning as a Single Page Application (SPA), bundled and optimized by Vite.
+- **Styling Architecture:** Tailwind CSS v4 for utility-first, responsive, and systematic design implementation.
+- **Data Synchronization:** TanStack React Query handles server state synchronization, caching, and background data fetching in tandem with Axios.
+- **Data Visualization:** Plotly.js renders complex datasets into interactive, high-fidelity analytical charts.
 
-## Local Setup and Installation
+### Server Application Layer
+- **API Framework:** FastAPI running on Python 3.12, providing high-throughput, asynchronous endpoints and automatic OpenAPI documentation generation.
+- **Data Persistence:** SQLAlchemy serves as the Object-Relational Mapper (ORM), abstracting interactions with underlying SQL databases (SQLite/PostgreSQL).
+- **Data Validation:** Pydantic enforces strict type checking and serialization of incoming and outgoing API payloads.
+- **Machine Learning Dependencies:** Scikit-Learn, XGBoost, Pandas, and NumPy power the predictive models and data transformations.
 
-To run the platform locally, follow these instructions. Ensure you have Node.js (v18+) and Python (3.10-3.12) installed on your system.
+## Local Development Initialization
 
-### 1. Initialize the Backend API
+To instantiate the platform within a local development environment, proceed with the following configuration steps. Ensure the host machine possesses Node.js (v18.0.0 or greater) and Python (3.10 through 3.12).
 
-Navigate to the backend directory, construct a virtual environment, and install the required dependencies:
+### 1. Backend Service Configuration
+
+Navigate to the `backend` directory to establish the isolated Python environment and initialize the FastAPI server.
 
 ```bash
 cd backend
 python -m venv venv
 
-# Windows
+# Windows Activation
 venv\Scripts\activate
-# Mac/Linux
+# Unix/MacOS Activation
 # source venv/bin/activate
 
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
-The API will initialize and bind to `http://localhost:8000`.
+Upon successful execution, the backend service will bind to `http://localhost:8000`. 
 
-### 2. Initialize the Frontend Dashboard
+### 2. Frontend Interface Configuration
 
-Open a separate terminal instance, navigate to the frontend directory, and start the development server:
+In a parallel terminal session, navigate to the `frontend` directory to install package dependencies and launch the Vite development server.
 
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-The application will be accessible at `http://localhost:5173`.
+The client interface will become accessible at `http://localhost:5173`.
 
-## Database Seeding
+## Database Initialization and Seeding
 
-To populate the database with an initial dataset of 50 generated coal samples, execute a POST request against the seed endpoint. 
+A newly initialized database requires seed data to populate the dashboard analytics. The system exposes an administrative endpoint to programmatically generate and insert 50 synthetic coal sample records.
 
-For a local environment:
+To execute the seeding operation locally:
 ```bash
 curl -X POST http://localhost:8000/seed
 ```
 
-For the production environment:
+To execute the seeding operation against the production environment:
 ```bash
 curl -X POST https://coallab-api.onrender.com/seed
 ```
 
-## Future Roadmap
+## Strategic Roadmap and Iterations
 
-1. **Phase 2:** Integrate Isolation Forest algorithms for automated anomaly detection regarding coal sample properties.
-2. **Phase 3:** Deploy XGBoost models to predict Gross Calorific Value (GCV) utilizing moisture and ash content metrics.
-3. **Phase 4:** Develop a Coal Blending Optimizer (utilizing Linear Programming and SciPy Optimize) to calculate recommended mixture ratios for target GCVs.
+The platform is subject to continuous iteration, specifically concerning its machine learning capabilities:
+
+1. **Phase 2:** Deployment of Isolation Forest algorithms to automate the identification of statistical anomalies within routine coal sample properties, ensuring strict quality control.
+2. **Phase 3:** Integration of trained XGBoost regression models to predict Gross Calorific Value (GCV) utilizing foundational metrics such as moisture and ash content.
+3. **Phase 4:** Development of a programmatic Coal Blending Optimizer applying Linear Programming (via SciPy) to mathematically calculate the most efficient mixture ratios required to achieve target operational GCV specifications.
