@@ -5,21 +5,26 @@ from app.core.database import SessionLocal, engine, Base
 from app.models.coal_sample import CoalSample
 import uuid
 
-# Re-create all tables
-Base.metadata.create_all(bind=engine)
+# Re-create all tables only when run directly
+if __name__ == "__main__":
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
-def seed_data():
-    db: Session = SessionLocal()
-    
+def seed_data(count: int = 500, db: Session = None):
+    own_session = False
+    if db is None:
+        db = SessionLocal()
+        own_session = True
+        
     mines = ["Alpha Washery", "Beta Colliery", "Gamma Open Cast", "Delta Underground", "Omega Works"]
     
-    print("Generating 100,000 synthetic coal samples...")
-    batch_size = 5000
+    print(f"Generating {count} synthetic coal samples...")
+    batch_size = 500
     samples = []
     
     start_date = datetime.datetime.now() - datetime.timedelta(days=365)
     
-    for i in range(100000):
+    for i in range(count):
         mine = random.choice(mines)
         
         # Add some natural variation based on the mine
@@ -35,7 +40,7 @@ def seed_data():
             
         moisture = random.uniform(2, 15)
         volatile_matter = random.uniform(15, 35)
-        fixed_carbon = 100 - (ash + moisture + volatile_matter)
+        fixed_carbon = max(0.0, 100 - (ash + moisture + volatile_matter))
         sulfur = random.uniform(0.1, 1.5)
         hgi = random.uniform(40, 90)
         
@@ -68,8 +73,16 @@ def seed_data():
         db.bulk_save_objects(samples)
         db.commit()
         
-    print("Successfully seeded 100,000 coal samples!")
-    db.close()
+    print(f"Successfully seeded {count} coal samples!")
+    if own_session:
+        db.close()
 
 if __name__ == "__main__":
-    seed_data()
+    import sys
+    count = 500
+    if len(sys.argv) > 1:
+        try:
+            count = int(sys.argv[1])
+        except ValueError:
+            pass
+    seed_data(count=count)

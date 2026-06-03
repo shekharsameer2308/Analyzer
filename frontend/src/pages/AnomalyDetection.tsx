@@ -88,7 +88,7 @@ export default function AnomalyDetection() {
                     <span className="bg-red-500/10 text-red-400 px-3 py-1 rounded-full text-xs font-bold border border-red-500/20">
                       Score: {sample.anomaly_score}/100
                     </span>
-                    <span className="text-white font-medium">Sample ID: {sample.id.substring(0, 8)}</span>
+                    <span className="text-white font-medium">Sample ID: {sample.sample_id}</span>
                     <span className="text-zinc-500 text-sm">{sample.mine_name}</span>
                   </div>
                   <p className="text-sm text-zinc-400 mt-2">

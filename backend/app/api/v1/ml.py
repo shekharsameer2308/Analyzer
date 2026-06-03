@@ -17,11 +17,11 @@ router = APIRouter()
 @router.get("/anomalies")
 def get_anomalies(db: Session = Depends(get_db)):
     """
-    Fetches all coal samples, runs them through the Isolation Forest
+    Fetches latest coal samples, runs them through the Isolation Forest
     ML model, and returns the analyzed data sorted by anomaly score.
     """
-    # Fetch all samples from the database
-    samples = db.query(CoalSample).all()
+    # Fetch latest 2000 samples from the database
+    samples = db.query(CoalSample).order_by(CoalSample.collection_date.desc()).limit(2000).all()
     
     # Run anomaly detection
     analyzed_samples = detect_anomalies(samples)
@@ -36,9 +36,9 @@ def get_anomalies(db: Session = Depends(get_db)):
 @router.post("/predict-gcv")
 def get_gcv_prediction(request: GCVPredictionRequest, db: Session = Depends(get_db)):
     """
-    Predicts the Gross Calorific Value (GCV) using an XGBoost model trained on all historical samples.
+    Predicts the Gross Calorific Value (GCV) using an XGBoost model trained on latest historical samples.
     """
-    samples = db.query(CoalSample).all()
+    samples = db.query(CoalSample).order_by(CoalSample.collection_date.desc()).limit(2000).all()
     
     input_features = {
         "moisture": request.moisture,

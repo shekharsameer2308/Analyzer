@@ -14,73 +14,100 @@ export default function SamplesList() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Coal Samples</h2>
+    <div className="space-y-6 max-w-[1600px] mx-auto pb-10">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+            <Database className="text-blue-500" size={32} />
+            Coal Samples
+          </h2>
+          <p className="text-sm text-zinc-500 mt-2">Manage and monitor all incoming raw coal sample laboratory telemetry</p>
+        </div>
         <div className="flex gap-4">
-          <button className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors">
+          <button className="bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm">
             <Filter size={16} /> Filter
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 shadow-sm transition-colors">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg font-medium flex items-center gap-2 shadow-lg shadow-blue-600/10 transition-colors cursor-pointer text-sm">
             <Database size={16} /> Upload CSV
           </button>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4">
+      <div className="bg-[#101010] border border-zinc-800/60 rounded-2xl overflow-hidden">
+        {/* Search Panel */}
+        <div className="p-4 border-b border-zinc-800/60 flex items-center gap-4 bg-zinc-950/20">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
             <input 
               type="text" 
               placeholder="Search by Sample ID or Mine Name..." 
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-11 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
             />
           </div>
         </div>
         
+        {/* Data Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-slate-500 dark:text-slate-400">
-            <thead className="bg-slate-50 dark:bg-slate-950 text-xs uppercase text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
+          <table className="w-full text-left text-sm text-zinc-400">
+            <thead className="bg-zinc-950/40 text-xs uppercase text-zinc-400 font-semibold border-b border-zinc-800/60">
               <tr>
                 <th className="px-6 py-4">Sample ID</th>
                 <th className="px-6 py-4">Mine Name</th>
-                <th className="px-6 py-4">GCV (kcal)</th>
+                <th className="px-6 py-4">GCV (kcal/kg)</th>
                 <th className="px-6 py-4">Ash (%)</th>
                 <th className="px-6 py-4">Moisture (%)</th>
                 <th className="px-6 py-4">Quality Score</th>
-                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4 text-right">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-zinc-800/30">
               {isLoading ? (
-                <tr><td colSpan={7} className="px-6 py-8 text-center text-slate-500">Loading samples...</td></tr>
+                <tr>
+                  <td colSpan={7} className="px-6 py-12 text-center text-zinc-500">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-6 h-6 border-2 border-zinc-800 border-t-blue-500 rounded-full animate-spin"></div>
+                      <span>Loading records...</span>
+                    </div>
+                  </td>
+                </tr>
               ) : samples?.length === 0 ? (
-                <tr><td colSpan={7} className="px-6 py-8 text-center text-slate-500">No samples found.</td></tr>
+                <tr>
+                  <td colSpan={7} className="px-6 py-12 text-center text-zinc-500">
+                    No coal samples found in the database.
+                  </td>
+                </tr>
               ) : (
                 samples?.map((sample: any) => (
-                  <tr key={sample.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200">{sample.sample_id}</td>
-                    <td className="px-6 py-4">{sample.mine_name}</td>
-                    <td className="px-6 py-4">{sample.gcv}</td>
-                    <td className="px-6 py-4">{sample.ash}</td>
-                    <td className="px-6 py-4">{sample.moisture}</td>
+                  <tr key={sample.id} className="hover:bg-zinc-900/20 transition-colors">
+                    <td className="px-6 py-4 font-mono font-medium text-white text-xs">{sample.sample_id}</td>
+                    <td className="px-6 py-4 text-zinc-300">{sample.mine_name}</td>
+                    <td className="px-6 py-4 font-mono text-zinc-300">{sample.gcv}</td>
+                    <td className="px-6 py-4 font-mono text-zinc-300">{sample.ash}%</td>
+                    <td className="px-6 py-4 font-mono text-zinc-300">{sample.moisture}%</td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="flex items-center gap-3">
+                        <div className="w-20 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                           <div 
-                            className={`h-full ${sample.quality_score > 75 ? 'bg-emerald-500' : sample.quality_score > 50 ? 'bg-blue-500' : 'bg-orange-500'}`} 
+                            className={`h-full rounded-full ${
+                              sample.quality_score > 75 ? 'bg-emerald-500 shadow-md shadow-emerald-500/20' : 
+                              sample.quality_score > 50 ? 'bg-blue-500 shadow-md shadow-blue-500/20' : 
+                              'bg-orange-500 shadow-md shadow-orange-500/20'
+                            }`} 
                             style={{ width: `${Math.max(0, Math.min(100, sample.quality_score || 0))}%` }}
                           />
                         </div>
-                        <span>{sample.quality_score}</span>
+                        <span className="font-mono text-zinc-300 text-xs">{sample.quality_score}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-right">
                       {sample.is_anomaly ? (
-                        <span className="bg-red-100 text-red-700 px-2.5 py-1 rounded-full text-xs font-semibold">Anomaly</span>
+                        <span className="bg-red-500/10 text-red-400 px-2.5 py-1 rounded-full text-xs font-semibold border border-red-500/20">
+                          Anomaly
+                        </span>
                       ) : (
-                        <span className="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full text-xs font-semibold">Normal</span>
+                        <span className="bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full text-xs font-semibold border border-emerald-500/20">
+                          Normal
+                        </span>
                       )}
                     </td>
                   </tr>

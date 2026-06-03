@@ -20,6 +20,7 @@ def detect_anomalies(samples: list) -> list:
             # Assuming it's an SQLAlchemy model, convert to dict
             data.append({
                 "id": s.id,
+                "sample_id": s.sample_id,
                 "mine_name": s.mine_name,
                 "moisture": s.moisture,
                 "ash": s.ash,
